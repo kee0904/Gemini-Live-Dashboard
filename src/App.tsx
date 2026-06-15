@@ -14,6 +14,7 @@ import SpiralOscilloscope from './components/SpiralOscilloscope';
 import SystemDials from './components/SystemDials';
 import ControlCenter from './components/ControlCenter';
 import DeepSpaceReceiver from './components/DeepSpaceReceiver';
+import GalaxyMap from './components/GalaxyMap';
 import { cyberAudio } from './utils/audio';
 import { 
   Sun, 
@@ -421,6 +422,11 @@ export default function App() {
 
         {/* CORE TELEMETRY PANEL BENTO GRID */}
         <section id="bento-visualizer-grid" className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          {/* Row 0: Full-Width live galaxy map */}
+          <div className="lg:col-span-12">
+            <GalaxyMap mode={mode} speed={speed} isDark={isDark} />
+          </div>
           
           {/* LEFT BENTO BLOCK (SPAN 7) */}
           <div className="lg:col-span-7 flex flex-col gap-6">

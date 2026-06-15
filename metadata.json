@@ -1,0 +1,6 @@
+{
+  "name": "Quantum Analytics Dashboard",
+  "description": "A high-fidelity real-time telemetry and cyber-analytics dashboard featuring neon terminal gauges, interactive widgets, particle network streams, and a dynamic spiral oscillo-viz with full dark/light mode toggle.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

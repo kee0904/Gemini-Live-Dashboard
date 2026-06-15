@@ -216,10 +216,11 @@ export default function SpectrumHistogram({ mode, speed, isDark }: SpectrumProps
             {/* The spectrum columns matching the beautiful bento gradient bar chart in the image */}
             {data.map((h, i) => {
               const widthRatio = 600 / barCount;
-              const barWidth = widthRatio - 4; // Gap between columns
-              const x = i * widthRatio + 2;
-              const height = (h * 1.8) + 4; // Scale and add baseline padding
-              const y = 240 - height;
+              const barWidth = widthRatio - 3; // Gap between columns
+              const x = i * widthRatio + 1.5;
+              const maxSegments = 12;
+              // Map heights (8 to 95) into discrete segment block states (1 to 12)
+              const segmentCount = Math.max(1, Math.round((h / 95) * maxSegments));
               const isHovered = hoveredIdx === i;
 
               return (
@@ -229,42 +230,30 @@ export default function SpectrumHistogram({ mode, speed, isDark }: SpectrumProps
                   onMouseEnter={() => setHoveredIdx(i)}
                   onMouseLeave={() => setHoveredIdx(null)}
                 >
-                  {/* Glowing backing shadow for hovered bar */}
-                  {isHovered && (
-                    <rect
-                      x={x - 2}
-                      y={y - 4}
-                      width={barWidth + 4}
-                      height={height + 6}
-                      fill="url(#spectrumGradient)"
-                      opacity="0.35"
-                      filter="url(#neonBlur)"
-                      rx="3"
-                    />
-                  )}
+                  {Array.from({ length: maxSegments }).map((_, segIdx) => {
+                    const isLit = segIdx < segmentCount;
+                    const segHeight = 15;
+                    const segGap = 3;
+                    const y = 240 - (segIdx + 1) * (segHeight + segGap);
 
-                  {/* Standard high-fidelity neon spectrum cylinder / column */}
-                  <rect
-                    x={x}
-                    y={y}
-                    width={barWidth}
-                    height={height}
-                    fill="url(#spectrumGradient)"
-                    opacity={hoveredIdx !== null && !isHovered ? "0.45" : "0.95"}
-                    rx="2"
-                    className="transition-all duration-300"
-                  />
-
-                  {/* Light reflections top cap */}
-                  <rect
-                    x={x + 1}
-                    y={y}
-                    width={barWidth - 2}
-                    height="3"
-                    fill="#ffffff"
-                    opacity="0.7"
-                    rx="1"
-                  />
+                    // Alternate colors: segment index >= 7 is orange, bottom 7 is dynamic mint cyan
+                    const isOrange = segIdx >= 8;
+                    const litColor = isOrange ? '#e2583e' : '#22d3ee';
+                    
+                    return (
+                      <rect
+                        key={segIdx}
+                        x={x}
+                        y={y}
+                        width={barWidth}
+                        height={segHeight}
+                        fill={isLit ? litColor : (isDark ? 'rgba(34, 211, 238, 0.05)' : 'rgba(15, 23, 42, 0.1)')}
+                        className="transition-all duration-300"
+                        opacity={isLit ? (isHovered ? 1.0 : 0.9) : 0.15}
+                        rx="1"
+                      />
+                    );
+                  })}
                 </g>
               );
             })}

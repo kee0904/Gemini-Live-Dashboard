@@ -6,6 +6,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NetworkNode, NetworkConnection, SimulationMode, SimulationSpeed } from '../types';
 import { Play, Sparkles, RefreshCw, Layers } from 'lucide-react';
+import { cyberAudio } from '../utils/audio';
 
 interface ParticleNetworkProps {
   mode: SimulationMode;
@@ -221,16 +222,17 @@ export default function ParticleNetwork({ mode, speed, isDark }: ParticleNetwork
       if (dist < 15) {
         setSelectedNode(node);
         foundNode = true;
+        cyberAudio.playSuccess();
       }
     });
 
     if (!foundNode) {
-      // Clear or select another randomly
+      cyberAudio.playClick();
     }
   };
 
   return (
-    <div id="particle-network-container" className={`relative rounded-xl border p-4 backdrop-blur-md transition-all ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
+    <div id="particle-network-container" className={`relative border p-4 backdrop-blur-md transition-all cyber-hud-card corner-ticks corner-ticks-inner ${isDark ? 'bg-[#040609]/95 border-cyan-500/15 text-slate-100 shadow-[0_0_20px_rgba(226,88,62,0.03)]' : 'bg-white/80 border-slate-200'}`}>
       <div className="flex items-center justify-between border-b pb-2 mb-3 border-dashed border-cyan-500/20">
         <div className="flex items-center gap-2">
           <div className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse" />
